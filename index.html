@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <title>Photo Quiz PWA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📸</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js" defer></script>
+</head>
+<body>
+  <!-- ==== Top bar with theme toggle ==== -->
+  <header class="top-bar" role="banner">
+    <h1 class="app-title">Photo Quiz</h1>
+    <button id="themeToggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle theme">
+      <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 000-1.41.996.996 0 00-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 000 1.41.996.996 0 001.41 0l1.06-1.06c.39-.39.39-1.03 0-1.41s-1.03-.39-1.41 0l-1.06 1.06z"/></svg>
+      <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg>
+    </button>
+  </header>
+
+  <!-- ==== Main tab panels ==== -->
+  <main id="panels" role="main">
+    <!-- CREATE -->
+    <section id="tab-create" class="panel" role="tabpanel" aria-labelledby="btn-create">
+      <header class="panel-head"><h2>Create Quiz</h2></header>
+      <div class="picker-wrap" id="imagePicker" role="list" aria-label="Image / PDF slots"></div>
+      <div class="actions">
+        <button id="btnGenerate" class="btn primary" disabled>Generate Quiz</button>
+      </div>
+    </section>
+
+    <!-- QUIZ -->
+    <section id="tab-quiz" class="panel hidden" role="tabpanel" aria-labelledby="btn-quiz">
+      <header class="panel-head"><h2 id="quizTitle">Quiz</h2></header>
+      <div id="quizContainer" class="quiz-container" role="region" aria-live="polite"></div>
+      <div class="quiz-progress" id="quizProgress" aria-label="Quiz progress"></div>
+      <div class="actions">
+        <button id="btnPrev" class="btn ghost" disabled>Previous</button>
+        <button id="btnNext" class="btn primary" disabled>Next</button>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="tab-history" class="panel hidden" role="tabpanel" aria-labelledby="btn-history">
+      <header class="panel-head"><h2>History</h2></header>
+      <ul id="historyList" class="history-list" role="list"></ul>
+    </section>
+  </main>
+
+  <!-- ==== Bottom tab bar ==== -->
+  <nav class="tab-bar" role="tablist" aria-label="Main navigation">
+    <button id="btn-create" class="tab-btn" role="tab" aria-selected="true" aria-controls="tab-create" data-tab="create">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      <span>Create</span>
+    </button>
+    <button id="btn-quiz" class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-quiz" data-tab="quiz">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+      <span>Quiz</span>
+    </button>
+    <button id="btn-history" class="tab-btn" role="tab" aria-selected="false" aria-controls="tab-history" data-tab="history">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+      <span>History</span>
+    </button>
+  </nav>
+
+  <!-- ==== Toast container ==== -->
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- ==== Global loading overlay ==== -->
+  <div id="loaderOverlay" class="loader-overlay hidden" role="status" aria-live="assertive">
+    <div class="spinner"></div>
+    <p>Working…</p>
+  </div>
+</body>
+</html>
